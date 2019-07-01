@@ -17,6 +17,10 @@ class RoleController extends Controller {
     ctx.body = await ctx.service.role.find(ctx.helper.parseInt(ctx.params.id));
   }
 
+  async new() {
+    const ctx = this.ctx;
+    ctx.body = await ctx.service.role.findAll();
+  }
   async create() {
     const ctx = this.ctx;
     const role = await this.service.role.create(ctx.request.body);

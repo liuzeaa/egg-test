@@ -7,14 +7,29 @@ class RoleService extends Service {
     return this.ctx.model.Role.findAndCountAll({
       offset,
       limit,
+      where: {
+        is_delected: false,
+      },
       order: [[ 'created_at', 'desc' ], [ 'id', 'desc' ]],
+    });
+  }
+  async findAll() {
+    return this.ctx.model.Role.findAll({
+      where: {
+        is_delected: false,
+      },
     });
   }
 
   async find(id) {
-    const role = await this.ctx.model.Role.findByPk(id);
+    const role = await this.ctx.model.Role.findOne({
+      where: {
+        is_delected: false,
+        id,
+      },
+    });
     if (!role) {
-      this.ctx.throw(404, 'user not found');
+      this.ctx.throw(404, 'role not found');
     }
     return role;
   }
@@ -26,7 +41,7 @@ class RoleService extends Service {
   async update({ id, updates }) {
     const role = await this.ctx.model.Role.findByPk(id);
     if (!role) {
-      this.ctx.throw(404, 'user not found');
+      this.ctx.throw(404, 'role not found');
     }
     return role.update(updates);
   }
@@ -34,7 +49,7 @@ class RoleService extends Service {
   async del(id) {
     const role = await this.ctx.model.Role.findByPk(id);
     if (!role) {
-      this.ctx.throw(404, 'user not found');
+      this.ctx.throw(404, 'role not found');
     }
     return role.update({ isDelected: true });
   }
